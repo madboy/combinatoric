@@ -14,23 +14,21 @@ func Permutations(values []int, r int) [][]int {
 
 	nbrOfPermutations := fact(n, r)
 	permutations := make([][]int, 0, nbrOfPermutations)
-	pool := make([]int, n)
-	copy(pool, values)
 
 	indices := Range(0, n)
 	cycles := RRange(n, n-r)
-	permutations = append(permutations, getValues(indices[:r], pool))
+	permutations = append(permutations, getValues(indices[:r], values))
 	for {
 		ii := math.MinInt32
 		for i := r - 1; i >= 0; i-- {
 			cycles[i]--
 			if cycles[i] == 0 {
-				indices = shuffleIndices(indices, i)
+				shuffleIndices(indices, i)
 				cycles[i] = n - i
 			} else {
 				j := cycles[i]
 				swap(indices, i, len(indices)-j)
-				permutations = append(permutations, getValues(indices[:r], pool))
+				permutations = append(permutations, getValues(indices[:r], values))
 				ii = j
 				break
 			}
@@ -50,12 +48,9 @@ func Combinations(values []int, r int) [][]int {
 	}
 	nbrOfCombinations := fact(n, n) / (fact(r, r) * fact(n-r, n-r))
 	combinations := make([][]int, 0, nbrOfCombinations)
-	pool := make([]int, n)
-	copy(pool, values)
-
 	indices := Range(0, r)
 
-	combinations = append(combinations, getValues(indices, pool))
+	combinations = append(combinations, getValues(indices, values))
 
 	for {
 		ii := math.MinInt32
@@ -75,7 +70,7 @@ func Combinations(values []int, r int) [][]int {
 		for j := ii + 1; j < r; j++ {
 			indices[j] = indices[j-1] + 1
 		}
-		combinations = append(combinations, getValues(indices, pool))
+		combinations = append(combinations, getValues(indices, values))
 	}
 }
 
@@ -109,11 +104,11 @@ func swap(values []int, f, t int) {
 	values[f], values[t] = values[t], values[f]
 }
 
-func shuffleIndices(indices []int, i int) []int {
-	tmp := make([]int, 0, len(indices))
-	tmp = append(tmp, indices[:i]...)
-	tmp = append(tmp, indices[i+1:]...)
-	return append(tmp, indices[i:i+1]...)
+func shuffleIndices(indices []int, i int) {
+	for j := i + 1; j < len(indices); j++ {
+		swap(indices, i, j)
+		i++
+	}
 }
 
 func fact(start, nbr int) int {
