@@ -113,7 +113,7 @@ func shuffleIndices(indices []int, i int) {
 
 func fact(start, nbr int) int {
 	v := 1
-	for i := 0; i < nbr; i++ {
+	for i := 0; i < nbr && start > 1; i++ {
 		v *= start
 		start--
 	}
