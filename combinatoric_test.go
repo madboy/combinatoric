@@ -6,6 +6,45 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+func TestCombinationsInputValues(t *testing.T) {
+	tests := []struct {
+		input    []int
+		r        int
+		expected [][]int
+	}{
+		{
+			input:    []int{1, 2, 3},
+			r:        4,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{},
+			r:        1,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{},
+			r:        0,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{1, 3, 4},
+			r:        0,
+			expected: [][]int{},
+		},
+	}
+	for _, tc := range tests {
+		got := Combinations(tc.input, tc.r)
+		if !cmp.Equal(got, tc.expected) {
+			t.Error(
+				"input", tc.input,
+				"expected", tc.expected,
+				"got", got,
+			)
+		}
+	}
+}
+
 func TestCombinations(t *testing.T) {
 	tests := []struct {
 		input    []int
@@ -22,6 +61,13 @@ func TestCombinations(t *testing.T) {
 			},
 		},
 		{
+			input: []int{1, 3, 5},
+			r:     3,
+			expected: [][]int{
+				[]int{1, 3, 5},
+			},
+		},
+		{
 			input: []int{3, 6, 8, 9},
 			r:     3,
 			expected: [][]int{
@@ -29,6 +75,27 @@ func TestCombinations(t *testing.T) {
 				[]int{3, 6, 9},
 				[]int{3, 8, 9},
 				[]int{6, 8, 9},
+			},
+		},
+		{
+			input: []int{4, 2, 8, 0, 3, 3},
+			r:     4,
+			expected: [][]int{
+				[]int{4, 2, 8, 0},
+				[]int{4, 2, 8, 3},
+				[]int{4, 2, 8, 3},
+				[]int{4, 2, 0, 3},
+				[]int{4, 2, 0, 3},
+				[]int{4, 2, 3, 3},
+				[]int{4, 8, 0, 3},
+				[]int{4, 8, 0, 3},
+				[]int{4, 8, 3, 3},
+				[]int{4, 0, 3, 3},
+				[]int{2, 8, 0, 3},
+				[]int{2, 8, 0, 3},
+				[]int{2, 8, 3, 3},
+				[]int{2, 0, 3, 3},
+				[]int{8, 0, 3, 3},
 			},
 		},
 	}
@@ -45,6 +112,44 @@ func TestCombinations(t *testing.T) {
 	}
 }
 
+func TestPermutationsInputValues(t *testing.T) {
+	tests := []struct {
+		input    []int
+		r        int
+		expected [][]int
+	}{
+		{
+			input:    []int{1, 2, 3},
+			r:        4,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{},
+			r:        1,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{},
+			r:        0,
+			expected: [][]int{},
+		},
+		{
+			input:    []int{1, 3, 4},
+			r:        0,
+			expected: [][]int{},
+		},
+	}
+	for _, tc := range tests {
+		got := Permutations(tc.input, tc.r)
+		if !cmp.Equal(got, tc.expected) {
+			t.Error(
+				"input", tc.input,
+				"expected", tc.expected,
+				"got", got,
+			)
+		}
+	}
+}
 func TestPermutations(t *testing.T) {
 	tests := []struct {
 		input    []int
@@ -106,33 +211,21 @@ func TestPermutations(t *testing.T) {
 			},
 		},
 		{
-			input: []int{6, 5, 9, 2},
-			r:     3,
+			input: []int{1, 2, 3, 4},
+			r:     2,
 			expected: [][]int{
-				[]int{6, 5, 9},
-				[]int{6, 5, 2},
-				[]int{6, 9, 5},
-				[]int{6, 9, 2},
-				[]int{6, 2, 5},
-				[]int{6, 2, 9},
-				[]int{5, 6, 9},
-				[]int{5, 6, 2},
-				[]int{5, 9, 6},
-				[]int{5, 9, 2},
-				[]int{5, 2, 6},
-				[]int{5, 2, 9},
-				[]int{9, 6, 5},
-				[]int{9, 6, 2},
-				[]int{9, 5, 6},
-				[]int{9, 5, 2},
-				[]int{9, 2, 6},
-				[]int{9, 2, 5},
-				[]int{2, 6, 5},
-				[]int{2, 6, 9},
-				[]int{2, 5, 6},
-				[]int{2, 5, 9},
-				[]int{2, 9, 6},
-				[]int{2, 9, 5},
+				[]int{1, 2},
+				[]int{1, 3},
+				[]int{1, 4},
+				[]int{2, 1},
+				[]int{2, 3},
+				[]int{2, 4},
+				[]int{3, 1},
+				[]int{3, 2},
+				[]int{3, 4},
+				[]int{4, 1},
+				[]int{4, 2},
+				[]int{4, 3},
 			},
 		},
 	}

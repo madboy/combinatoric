@@ -7,21 +7,22 @@ import (
 // Permutations returns permutations of values of length r
 // Implementation based on https://docs.python.org/3.6/library/itertools.html#itertools.permutations
 func Permutations(values []int, r int) [][]int {
-	var permutations [][]int
-	pool := make([]int, len(values))
-	copy(pool, values)
-	n := len(pool)
-
-	if r > n {
-		return permutations
+	n := len(values)
+	if r > n || n == 0 || r == 0 {
+		return [][]int{}
 	}
+
+	nbrOfPermutations := fact(n, r)
+	permutations := make([][]int, 0, nbrOfPermutations)
+	pool := make([]int, n)
+	copy(pool, values)
 
 	indices := Range(0, n)
 	cycles := RRange(n, n-r)
 	permutations = append(permutations, getValues(indices[:r], pool))
 	for {
 		ii := math.MinInt32
-		for _, i := range Reversed(Range(0, r)) {
+		for i := r - 1; i >= 0; i-- {
 			cycles[i]--
 			if cycles[i] == 0 {
 				indices = shuffleIndices(indices, i)
@@ -43,20 +44,22 @@ func Permutations(values []int, r int) [][]int {
 // Combinations retruns unique combinations of values of length r
 // Implementation from python itertools https://docs.python.org/3.6/library/itertools.html#itertools.combinations
 func Combinations(values []int, r int) [][]int {
-	var combinations [][]int
-	pool := make([]int, len(values))
-	copy(pool, values)
-	n := len(pool)
-	if r > n {
-		return combinations
+	n := len(values)
+	if r > n || n == 0 || r == 0 {
+		return [][]int{}
 	}
+	nbrOfCombinations := fact(n, n) / (fact(r, r) * fact(n-r, n-r))
+	combinations := make([][]int, 0, nbrOfCombinations)
+	pool := make([]int, n)
+	copy(pool, values)
+
 	indices := Range(0, r)
 
 	combinations = append(combinations, getValues(indices, pool))
 
 	for {
 		ii := math.MinInt32
-		for _, i := range Reversed(Range(0, r)) {
+		for i := r - 1; i >= 0; i-- {
 			if indices[i] != i+n-r {
 				ii = i
 				break
@@ -69,7 +72,7 @@ func Combinations(values []int, r int) [][]int {
 			return combinations
 		}
 		indices[ii]++
-		for _, j := range Range(ii+1, r) {
+		for j := ii + 1; j < r; j++ {
 			indices[j] = indices[j-1] + 1
 		}
 		combinations = append(combinations, getValues(indices, pool))
@@ -78,7 +81,7 @@ func Combinations(values []int, r int) [][]int {
 
 // Range return a list of integers from low .. high-1
 func Range(low, high int) []int {
-	var r []int
+	r := make([]int, 0, high-low)
 	for i := low; i < high; i++ {
 		r = append(r, i)
 	}
@@ -87,24 +90,15 @@ func Range(low, high int) []int {
 
 // RRange return a list of integers from high .. low-1
 func RRange(high, low int) []int {
-	var r []int
+	r := make([]int, 0, high-low)
 	for i := high; i > low; i-- {
 		r = append(r, i)
 	}
 	return r
 }
 
-// Reversed returns a list of integers in reverse order
-func Reversed(values []int) []int {
-	var reversed []int
-	for i := len(values) - 1; i >= 0; i-- {
-		reversed = append(reversed, values[i])
-	}
-	return reversed
-}
-
 func getValues(indices, values []int) []int {
-	var combination []int
+	combination := make([]int, 0, len(indices))
 	for _, i := range indices {
 		combination = append(combination, values[i])
 	}
@@ -116,8 +110,17 @@ func swap(values []int, f, t int) {
 }
 
 func shuffleIndices(indices []int, i int) []int {
-	var tmp []int
+	tmp := make([]int, 0, len(indices))
 	tmp = append(tmp, indices[:i]...)
 	tmp = append(tmp, indices[i+1:]...)
 	return append(tmp, indices[i:i+1]...)
+}
+
+func fact(start, nbr int) int {
+	v := 1
+	for i := 0; i < nbr; i++ {
+		v *= start
+		start--
+	}
+	return v
 }
