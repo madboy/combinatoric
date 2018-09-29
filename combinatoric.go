@@ -15,8 +15,8 @@ func Permutations(values []int, r int) [][]int {
 	nbrOfPermutations := fact(n, r)
 	permutations := make([][]int, 0, nbrOfPermutations)
 
-	indices := Range(0, n)
-	cycles := RRange(n, n-r)
+	indices := _range(0, n)
+	cycles := _rRange(n, n-r)
 	permutations = append(permutations, getValues(indices[:r], values))
 	for {
 		ii := math.MinInt32
@@ -48,7 +48,7 @@ func Combinations(values []int, r int) [][]int {
 	}
 	nbrOfCombinations := fact(n, n) / (fact(r, r) * fact(n-r, n-r))
 	combinations := make([][]int, 0, nbrOfCombinations)
-	indices := Range(0, r)
+	indices := _range(0, r)
 
 	combinations = append(combinations, getValues(indices, values))
 
@@ -74,8 +74,8 @@ func Combinations(values []int, r int) [][]int {
 	}
 }
 
-// Range return a list of integers from low .. high-1
-func Range(low, high int) []int {
+// _range return a list of integers from low .. high-1
+func _range(low, high int) []int {
 	r := make([]int, 0, high-low)
 	for i := low; i < high; i++ {
 		r = append(r, i)
@@ -83,8 +83,8 @@ func Range(low, high int) []int {
 	return r
 }
 
-// RRange return a list of integers from high .. low-1
-func RRange(high, low int) []int {
+// _rRange return a list of integers from high .. low-1
+func _rRange(high, low int) []int {
 	r := make([]int, 0, high-low)
 	for i := high; i > low; i-- {
 		r = append(r, i)

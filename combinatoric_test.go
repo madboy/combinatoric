@@ -1,6 +1,7 @@
 package combinatoric
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -253,4 +254,24 @@ func allPresent(got, expected [][]int) bool {
 		}
 	}
 	return matches == len(got)
+}
+
+func ExampleCombinations() {
+	l := []int{1, 3, 5}
+
+	fmt.Println(Combinations(l, 2))
+	fmt.Println(Combinations(l, 3))
+	// Output:
+	// [[1 3] [1 5] [3 5]]
+	// [[1 3 5]]
+}
+
+func ExamplePermutations() {
+	l := []int{1, 3, 5}
+
+	fmt.Println(Permutations(l, 2))
+	fmt.Println(Permutations(l, 3))
+	// Output:
+	// [[1 3] [1 5] [3 1] [3 5] [5 1] [5 3]]
+	// [[1 3 5] [1 5 3] [3 1 5] [3 5 1] [5 1 3] [5 3 1]]
 }
